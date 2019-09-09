@@ -2,14 +2,57 @@
 // file: index.adoc
 //
 = Triple-A For Exploitation Platforms
+:author: Triple-A Identity4EO Team
+:email: <id4eo.contact@deimos-space.com>
 :sectnums:
 :toc: left
 :toclevels: 3
 
 :toc!:
 
-== Triple-A Asciidoc
+== Introduction
 
-*2019-12-22*
+Triple-A for Exploitation Platforms is an activity within the scope of the ESA EO Science For Society Permanently Open Call For Proposals EOEP-5 BLOCK 4.
 
-Testing asciidoc
+This project demonstrates an Authentication, Authorization and Accounting pre-operational service using state of the arts standards for resolving the usability and interoperability issues while enabling centralised trace of user access for accounting.
+
+== Services 
+
+Triple-A  provides the following services through its main service portal (https://triple-a.elecnor-deimos.com).
+
+=== Authentication
+
+EO Users can be authenticated through basic user profile registration, social network login or from external Identity Providers.
+
+=== Authorization
+
+EO Application Owners can perform dynamic client registration of EO Application with their associated resources for protecting them through policies.
+
+=== Accounting 
+
+Triple-A Operators can visualize and analyze the resource usage/access information.
+
+* Analytics Platform (https://triple-a.elecnor-deimos.com/analytics)
+
+=== Service Desk Support
+
+EO Application Owners and Users can access the Service Desk to request support from operators.
+
+* Triple-A Service Desk (https://triple-a-sd.elecnor-deimos.com) 
+* Service Desk Guidelines (https://triple-a-docs.github.io/sd-guidelines)
+
+
+== Resources
+=== Integration Guide
+
+Triple-A provides a complete integration guide for developers interested in the integration of new EO Applications.
+
+https://triple-a-docs.github.io/integration-guide[Integration Guide]
+
+=== Demonstration Videos
+==== Authentication
+video::-uSrLPL3YXk[youtube]
+==== Authorization
+video::5_dqZiqBLfs[youtube]
+==== Accounting
+video::sG_3Re4yYwg[youtube]
