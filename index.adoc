@@ -16,6 +16,8 @@ Triple-A for Exploitation Platforms is an activity within the scope of the ESA E
 
 This project demonstrates an Authentication, Authorization and Accounting pre-operational service using state of the arts standards for resolving the usability and interoperability issues while enabling centralised trace of user access for accounting.
 
+Its main landing page resides in https://triple-a-web.elecnor-deimos.com
+
 == Services 
 
 Triple-A  provides the following services through its main service portal (https://triple-a.elecnor-deimos.com).
@@ -42,7 +44,7 @@ EO Application Owners and Users can access the Service Desk to request support f
 * Service Desk Guidelines (https://triple-a-docs.github.io/sd-guidelines)
 
 
-== Resources
+== Additional Resources
 === Integration Guide
 
 Triple-A provides a complete integration guide for developers interested in the integration of new EO Applications.
