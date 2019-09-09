@@ -1,10 +1,11 @@
 = Triple-A For Exploitation Platforms Integration Guide
-
 :author: Triple-A Identity4EO Team
 :email: <id4eo.contact@deimos-space.com>
 :sectnums:
 :toc: left
-:toclevels: 5
+:sectnumlevels: 5
+:toclevels: 4
+
 :toc!:
 
 == Authentication 
@@ -42,7 +43,7 @@ image::images/oidc_response_types.PNG[width=300,align="center"]
 
 When accessing the Token Endpoint, clients using the implicit flow are not required to be authenticated, but if the client uses the Authorization Code Flow, it must provide its credentials.
 
-These credentials will be provided by NextGEOSS UM: client_id and client_secret.
+These credentials will be provided by Triple-A: client_id and client_secret.
 
 ==== Request Endpoints for Authentication
 All endpoints require a set of mandatory parameters in order to generate a valid response. Their URLs can be obtained by means of a Discovery URI that answers back with a set of endpoints and their URLs. All these URLs must be accessed by means of a GET request, and require a set of mandatory parameters:
@@ -53,7 +54,7 @@ All endpoints require a set of mandatory parameters in order to generate a valid
 Parameters:
 ** scope: The request should include an array of scopes, with one of them being “openid”.
 ** response_type: Its value should be desired combination according to the OpenID Connect response type table.
-** client_id: Provided by NextGEOSS UM.
+** client_id: Provided by Triple-A.
 ** redirect_uri: It should point to the client application and match the URI given on the acceptance request.
 ** state (optional): Opaque value used to maintain state between the request and the callback. Typically, Cross-Site Request Forgery (CSRF, XSRF) mitigation is done by cryptographically binding the value of this parameter with a browser cookie.
 ** nonce (optional/*required for Implicit Flow*): String value used to associate a Client session with an ID Token, and to mitigate replay attacks (it can have ANY value)
@@ -69,8 +70,8 @@ If the application is trying to authenticate without user input, user credential
 ** Code*: Used only with grant_type=authorization_code
 ** redirect_uri: It should point to the client application and match the URI given on the acceptance request.
 ** scope: The request should include an array of scopes, with one of them being “openid”.
-** client_id*: Provided by NextGEOSS UM, only necessary with grant_type=authorization_code.
-** client_secret*: Provided by NextGEOSS UM, only necessary with grant_type=authorization_code
+** client_id*: Provided by Triple-A, only necessary with grant_type=authorization_code.
+** client_secret*: Provided by Triple-A, only necessary with grant_type=authorization_code
 
 === Client-side implementation
 
@@ -229,7 +230,7 @@ For web-based clients, there are several Free and Open Source JavaScript solutio
 *	*Authorization Endpoint* (GET): /oxauth/restv1/authorize
 ** scope: “openid geoss_user”.
 ** response_type: “id_token token”.
-** client_id: Provided by NextGEOSS UM.
+** client_id: Provided by Triple-A.
 ** redirect_uri: <TBD>
 
 .Example:
@@ -243,7 +244,7 @@ For back-end powered clients, there are several Free and Open Source solutions a
 *	*Authorization Endpoint* (GET): /oxauth/restv1/authorize
 ** scope: “openid geoss_user”.
 ** response_type: “code”.
-** client_id: Provided by NextGEOSS UM.
+** client_id: Provided by Triple-A.
 ** redirect_uri: <TBD>
 
 .Example:
@@ -254,8 +255,8 @@ GET /oxauth/restv1/authorize?scope=openid%20geoss_user&client_id=<TBD>&redirect_
 ** scope: “openid geoss_user”.
 ** grant_type: authorization_code.
 ** code: Obtained on the previous request.
-** client_id: Provided by NextGEOSS UM.
-** client_secret: Provided by NextGEOSS UM
+** client_id: Provided by Triple-A.
+** client_secret: Provided by Triple-A
 ** redirect_uri: <TBD>
 
 .Example:
@@ -282,19 +283,7 @@ When using the openid scope, the Authorization Server will always answer with a 
 ===============================================
 
 
-=== Service-Side Authorization
-Any Service should define which user attributes are required to interact with its services. After that, any received request must contain an access token (obtained using the Authorization/Token Endpoint).
-
-Using the NextGEOSS UM Service, it is possible to implement authorization measures in order to protect access to a registered resource. Although each client can implement its own independent authorization methods, the two main options made available by NextGEOSS are the usage of scopes and UMA.
-
-This access token can be included in an internal request to the Authorization Server User Info Endpoint, which returns the set of default attributes that can be checked internally by the service in order to determine if access should be granted.
-
-[#service_authz,reftext='{figure-caption} {counter:figure-num}']
-.Service-Side Authorization example
-image::images/Service_Authorization.PNG[width=500,align="center"]
-
-In this image, the Server does not know if the Client is the one performing the Token Request.
-
+=== Policy Decision Point Authorization
 ==== User Managed Access (UMA)
 
 [NOTE]

@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.8.dev">
+<meta name="author" content="Triple-A Identity4EO Team">
 <title>Triple-A For Exploitation Platforms Integration Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -436,9 +437,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
 <h1>Triple-A For Exploitation Platforms Integration Guide</h1>
+<div class="details">
+<span id="author" class="author">Triple-A Identity4EO Team</span><br>
+<span id="email" class="email">&lt;<a href="mailto:id4eo.contact@deimos-space.com">id4eo.contact@deimos-space.com</a>&gt;</span><br>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#trueauthentication">1. Authentication</a>
+<ul class="sectlevel2">
+<li><a href="#trueconcepts-and-approach">1.1. Concepts and Approach</a>
+<ul class="sectlevel3">
+<li><a href="#trueauthentication-flows">1.1.1. Authentication Flows</a></li>
+<li><a href="#trueclient-authentication">1.1.2. Client authentication</a></li>
+<li><a href="#truerequest-endpoints-for-authentication">1.1.3. Request Endpoints for Authentication</a></li>
+</ul>
+</li>
+<li><a href="#trueclient-side-implementation">1.2. Client-side implementation</a>
+<ul class="sectlevel3">
+<li><a href="#trueregistration">1.2.1. Registration</a>
+<ul class="sectlevel4">
+<li><a href="#truestatic-registration">1.2.1.1. Static Registration</a></li>
+<li><a href="#truedynamic-registration">1.2.1.2. Dynamic Registration</a></li>
+<li><a href="#truebasic-example">1.2.1.3. Basic example</a></li>
+<li><a href="#trueend-user-clients">1.2.1.4. End-User clients</a></li>
+<li><a href="#truetesting-client-for-service-implementers">1.2.1.5. Testing client (for service implementers)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#trueimplementation-solutions-for-js-clients">1.3. Implementation Solutions for JS Clients</a></li>
+<li><a href="#trueimplementation-solutions-for-clients-with-back-end">1.4. Implementation Solutions for Clients with Back-end</a></li>
+</ul>
+</li>
+<li><a href="#trueauthorization">2. Authorization</a>
+<ul class="sectlevel2">
+<li><a href="#truetoken-validation-and-end-user-authorization">2.1. Token Validation and End-user Authorization</a></li>
+<li><a href="#trueservice-side-authorization">2.2. Service-Side Authorization</a>
+<ul class="sectlevel3">
+<li><a href="#trueuser-managed-access-uma">2.2.1. User Managed Access (UMA)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div class="sect1">
@@ -515,7 +561,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>When accessing the Token Endpoint, clients using the implicit flow are not required to be authenticated, but if the client uses the Authorization Code Flow, it must provide its credentials.</p>
 </div>
 <div class="paragraph">
-<p>These credentials will be provided by NextGEOSS UM: client_id and client_secret.</p>
+<p>These credentials will be provided by Triple-A: client_id and client_secret.</p>
 </div>
 </div>
 <div class="sect3">
@@ -540,7 +586,7 @@ Parameters:</p>
 <p>response_type: Its value should be desired combination according to the OpenID Connect response type table.</p>
 </li>
 <li>
-<p>client_id: Provided by NextGEOSS UM.</p>
+<p>client_id: Provided by Triple-A.</p>
 </li>
 <li>
 <p>redirect_uri: It should point to the client application and match the URI given on the acceptance request.</p>
@@ -584,10 +630,10 @@ Parameters:</p>
 <p>scope: The request should include an array of scopes, with one of them being “openid”.</p>
 </li>
 <li>
-<p>client_id*: Provided by NextGEOSS UM, only necessary with grant_type=authorization_code.</p>
+<p>client_id*: Provided by Triple-A, only necessary with grant_type=authorization_code.</p>
 </li>
 <li>
-<p>client_secret*: Provided by NextGEOSS UM, only necessary with grant_type=authorization_code</p>
+<p>client_secret*: Provided by Triple-A, only necessary with grant_type=authorization_code</p>
 </li>
 </ul>
 </div>
@@ -601,7 +647,7 @@ Parameters:</p>
 <div class="sect3">
 <h4 id="trueregistration"><a class="anchor" href="#trueregistration"></a>1.2.1. Registration</h4>
 <div class="sect4">
-<h5 id="truestatic-registration"><a class="anchor" href="#truestatic-registration"></a>Static Registration</h5>
+<h5 id="truestatic-registration"><a class="anchor" href="#truestatic-registration"></a>1.2.1.1. Static Registration</h5>
 <div class="paragraph">
 <p>In order to allow a client application to delegate its sign-in function under the SSO system of the Authorization Server, it is necessary to provide the following parameters:</p>
 </div>
@@ -641,7 +687,7 @@ Parameters:</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="truedynamic-registration"><a class="anchor" href="#truedynamic-registration"></a>Dynamic Registration</h5>
+<h5 id="truedynamic-registration"><a class="anchor" href="#truedynamic-registration"></a>1.2.1.2. Dynamic Registration</h5>
 <div class="paragraph">
 <p>Another way of registering clients is through the dynamic register method defined on the OAuth2.0 specification and extended to allow OpenID Connect parameters.</p>
 </div>
@@ -737,7 +783,7 @@ Parameters:</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="truebasic-example"><a class="anchor" href="#truebasic-example"></a>Basic example</h5>
+<h5 id="truebasic-example"><a class="anchor" href="#truebasic-example"></a>1.2.1.3. Basic example</h5>
 <div class="paragraph">
 <p>The most basic example for dynamic client registration would be:</p>
 </div>
@@ -799,7 +845,7 @@ Parameters:</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="trueend-user-clients"><a class="anchor" href="#trueend-user-clients"></a>End-User clients</h5>
+<h5 id="trueend-user-clients"><a class="anchor" href="#trueend-user-clients"></a>1.2.1.4. End-User clients</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">POST /oxauth/restv1/register
@@ -819,7 +865,7 @@ Parameters:</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="truetesting-client-for-service-implementers"><a class="anchor" href="#truetesting-client-for-service-implementers"></a>Testing client (for service implementers)</h5>
+<h5 id="truetesting-client-for-service-implementers"><a class="anchor" href="#truetesting-client-for-service-implementers"></a>1.2.1.5. Testing client (for service implementers)</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">POST /oxauth/restv1/register
@@ -853,7 +899,7 @@ Parameters:</p>
 <p>response_type: “id_token token”.</p>
 </li>
 <li>
-<p>client_id: Provided by NextGEOSS UM.</p>
+<p>client_id: Provided by Triple-A.</p>
 </li>
 <li>
 <p>redirect_uri: &lt;TBD&gt;</p>
@@ -888,7 +934,7 @@ Parameters:</p>
 <p>response_type: “code”.</p>
 </li>
 <li>
-<p>client_id: Provided by NextGEOSS UM.</p>
+<p>client_id: Provided by Triple-A.</p>
 </li>
 <li>
 <p>redirect_uri: &lt;TBD&gt;</p>
@@ -920,10 +966,10 @@ Parameters:</p>
 <p>code: Obtained on the previous request.</p>
 </li>
 <li>
-<p>client_id: Provided by NextGEOSS UM.</p>
+<p>client_id: Provided by Triple-A.</p>
 </li>
 <li>
-<p>client_secret: Provided by NextGEOSS UM</p>
+<p>client_secret: Provided by Triple-A</p>
 </li>
 <li>
 <p>redirect_uri: &lt;TBD&gt;</p>
@@ -992,7 +1038,7 @@ Parameters:</p>
 <p>Any Service should define which user attributes are required to interact with its services. After that, any received request must contain an access token (obtained using the Authorization/Token Endpoint).</p>
 </div>
 <div class="paragraph">
-<p>Using the NextGEOSS UM Service, it is possible to implement authorization measures in order to protect access to a registered resource. Although each client can implement its own independent authorization methods, the two main options made available by NextGEOSS are the usage of scopes and UMA.</p>
+<p>Using the Triple-A Service, it is possible to implement authorization measures in order to protect access to a registered resource. Although each client can implement its own independent authorization methods, Triple-A provides UMA as Authorization method.</p>
 </div>
 <div class="paragraph">
 <p>This access token can be included in an internal request to the Authorization Server User Info Endpoint, which returns the set of default attributes that can be checked internally by the service in order to determine if access should be granted.</p>
@@ -1039,7 +1085,7 @@ Parameters:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-09 17:15:54 +0200
+Last updated 2019-09-09 17:23:30 +0200
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
