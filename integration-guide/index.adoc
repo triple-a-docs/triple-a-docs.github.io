@@ -12,6 +12,12 @@
 
 === Concepts and Approach
 
+All endpoints described in this Integration Guide can be found in the following available discovery documents:
+
+* OIDC Endpoints: https://triple-a.elecnor-deimos.com/.well-known/openid-configuration
+* UMA Endpoints:  https://triple-a.elecnor-deimos.com/.well-known/uma2-configuration
+
+
 ==== Authentication Flows
 In order to interact with this service, it is necessary to implement one of the three authorization flows defined by OpenID Connect 1.0 standard: implicit flow, authorization code flow and hybrid flow.
 
