@@ -476,9 +476,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#trueauthorization">2. Authorization</a>
 <ul class="sectlevel2">
 <li><a href="#truetoken-validation-and-end-user-authorization">2.1. Token Validation and End-user Authorization</a></li>
-<li><a href="#trueservice-side-authorization">2.2. Service-Side Authorization</a>
+<li><a href="#trueauthorization-user-managed-access-uma">2.2. Authorization: User Managed Access (UMA)</a>
 <ul class="sectlevel3">
-<li><a href="#trueuser-managed-access-uma">2.2.1. User Managed Access (UMA)</a></li>
+<li><a href="#trueauthorization-flow">2.2.1. Authorization Flow</a></li>
+<li><a href="#trueresource-managing">2.2.2. Resource Managing</a></li>
+<li><a href="#truepolicy-enforcement-pep">2.2.3. Policy Enforcement (PEP)</a></li>
+<li><a href="#truepolicy-decision-pdp">2.2.4. Policy Decision (PDP).</a></li>
+<li><a href="#truetoken-introspection">2.2.5. Token Introspection</a></li>
 </ul>
 </li>
 </ul>
@@ -1033,41 +1037,157 @@ Parameters:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="trueservice-side-authorization"><a class="anchor" href="#trueservice-side-authorization"></a>2.2. Service-Side Authorization</h3>
+<h3 id="trueauthorization-user-managed-access-uma"><a class="anchor" href="#trueauthorization-user-managed-access-uma"></a>2.2. Authorization: User Managed Access (UMA)</h3>
+<div class="sect3">
+<h4 id="trueauthorization-flow"><a class="anchor" href="#trueauthorization-flow"></a>2.2.1. Authorization Flow</h4>
 <div class="paragraph">
-<p>Any Service should define which user attributes are required to interact with its services. After that, any received request must contain an access token (obtained using the Authorization/Token Endpoint).</p>
+<p>As a summarized flow, Authorization on UMA architectures is implemented with the following workflow:</p>
 </div>
-<div class="paragraph">
-<p>Using the Triple-A Service, it is possible to implement authorization measures in order to protect access to a registered resource. Although each client can implement its own independent authorization methods, Triple-A provides UMA as Authorization method.</p>
-</div>
-<div class="paragraph">
-<p>This access token can be included in an internal request to the Authorization Server User Info Endpoint, which returns the set of default attributes that can be checked internally by the service in order to determine if access should be granted.</p>
-</div>
-<div id="service_authz" class="imageblock text-center">
+<div id="img_oidc_reponse_types" class="imageblock text-center">
 <div class="content">
-<img src="images/Service_Authorization.PNG" alt="Service Authorization" width="500">
+<img src="images/uma.PNG" alt="uma" width="700">
 </div>
-<div class="title">Figure 2. Service-Side Authorization example</div>
+<div class="title">Figure 2. Authorization Flow using UMA</div>
 </div>
-<div class="paragraph">
-<p>In this image, the Server does not know if the Client is the one performing the Token Request.</p>
 </div>
 <div class="sect3">
-<h4 id="trueuser-managed-access-uma"><a class="anchor" href="#trueuser-managed-access-uma"></a>2.2.1. User Managed Access (UMA)</h4>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="title">Work In Progress</div>
+<h4 id="trueresource-managing"><a class="anchor" href="#trueresource-managing"></a>2.2.2. Resource Managing</h4>
 <div class="paragraph">
-<p>UMA Authorization description is in progress</p>
+<p>Resource servers (RS) can register and list their registered resources using the API Endpoint (i.e: <a href="https://um.nextgeoss.eu/oxauth/restv1/host/rsrc/resource_set" class="bare">https://um.nextgeoss.eu/oxauth/restv1/host/rsrc/resource_set</a>)</p>
 </div>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>In order to interact with the UMA API, an access token must be requested to the Token Endpoint (which is the same as OpenID Connect Token Endpoint) including an additional scope: uma_protection. This special access token is named PAT (Protection API Token). If a RS wants to register a resource, first a POST request must be issued to the token endpoint:</p>
+</div>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">POST /oxauth/restv1/token -H 'Authorization: Bearer &lt;PAT&gt;' -H 'Content-type: application-json'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Body (JSON)</p>
+</div>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+              "name": "&lt;Resource name&gt;",
+              "uri": "&lt;Location of the resource&gt;",
+              "type": "&lt;Optional&gt;",
+              "resource_scopes": [&lt;SCOPE_ARRAY (strings)&gt;],
+              "icon_uri": "&lt;ICON_URI&gt;"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The answer to this request will be a JSON with the ID of the resource under the key “_id”.</p>
+</div>
+<div class="paragraph">
+<p>In addition, in case information about registered resources needs to be retrieved the following method is available:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">GET /restv1/host/rsrc/resource_set/&lt;resourceId&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The parameter “resourceId” must be replaced by the ID of any registered resource. If no resource ID is passed to this Endpoint, the result will be a list of registered resources by the specific RS that performed the request. Additionally, RS owners should manually provide the policies (set of claims) which apply to the resource so they can be registered by an admin on the UMA service. This method will be replaced by a dynamic registration of necessary claims per resource.
+Resource Access Request (Client side)</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="truepolicy-enforcement-pep"><a class="anchor" href="#truepolicy-enforcement-pep"></a>2.2.3. Policy Enforcement (PEP)</h4>
+<div class="paragraph">
+<p>On the server side, 2 steps must be performed: PAT acquisition  and Ticket request generation</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PAT acquisition. will be the same request as the one mentioned on the “Resource Managing” section.</p>
+</li>
+<li>
+<p>Ticket request.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">POST /oxauth/restv1/host/rsrc_pr -H 'Authorization: Bearer &lt;PAT_Token&gt;' -H 'Content-type: application-json'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Body (JSON)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+       "resource_id": "&lt;RS_ID&gt;",
+       "resource_scopes": [&lt;SCOPE_ARRAY (strings)&gt;]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result to this request will be a simple JSON (201 Created) with a “ticket” field. On the other hand, if the PAT token is not valid, a 401 Unauthorized response will be issued.</p>
+</div>
+<div class="paragraph">
+<p>This ticket field will be included in a 400 or 403 response by the Resource Server, indicating where it can be exchanged for an Resource Access Token.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="truepolicy-decision-pdp"><a class="anchor" href="#truepolicy-decision-pdp"></a>2.2.4. Policy Decision (PDP).</h4>
+<div class="paragraph">
+<p>When acquiring a resource token using a ticket, the UMA service will try to check user claims (such as attributes, user ID, client ID). Some of those claims can’t be gathered using the service itself and the parameters on the request, so it might be necessary to gather those claims and get a new ticket.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">POST /oxauth/restv1/token</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Body (Form)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">    scope=&lt;scopes&gt; (separated by a space)
+    client_secret=&lt;secret&gt;
+    ticket=&lt;ticket&gt;
+    client_id=&lt;client_id&gt;
+    grant_type=urn:ietf:params:oauth:grant-type:uma-ticket</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the ticket is valid and the user claims are matched, a Resource Token a JSON response with the field “access_token” will be issued. If not, a 403 (Forbidden) response will be issued. This response can have another JSON attached explaining the error. If the error matches the “need_info” string, it is possible to extract an URL from the field “redirect_user” to gather any remaining claims.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">GET  &lt;redirect_user_URI&gt;?ticket=&lt;ticket&gt;&amp;client_id=&lt;client_id&gt;&amp;claims_redirect_uri=&lt;redirect_uri&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The redirect_uri in this request must be specified on the client configuration. This request will result will redirect the user to another location with the response parameters parsed in the URL. One of this parameters should be a new “ticket” that can be used to request the token again, taking into account the gathered claims.</p>
+</div>
+<div class="paragraph">
+<p>In any case, with or without claims, the token endpoint can issue a 403 Forbidden response indicating that the policies in place forbid access to the resource.
+Resource Access Grant (Server side)</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="truetoken-introspection"><a class="anchor" href="#truetoken-introspection"></a>2.2.5. Token Introspection</h4>
+<div class="paragraph">
+<p>A Resource Server should expect a resource token for each access request. If no token is provided, a redirection to the UMA client service should be implemented. If a token is provided, it is possible to “introspect” this token to determine if access to the resource should be granted. The RS should acquire a PAT with the same method used to manage resources.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs"> POST /oxauth/restv1/rpt/status -H ' Authorization: Bearer &lt;PAT&gt;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Body (Form)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">    Token=&lt;Resource_Access_Token&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1085,7 +1205,7 @@ Parameters:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-09 17:23:30 +0200
+Last updated 2019-09-10 16:56:42 +0200
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
