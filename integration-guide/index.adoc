@@ -295,9 +295,11 @@ image::images/uma.PNG[width=700,align="center"]
 
 ==== Resource Managing
 
-Resource servers (RS) can register and list their registered resources using the API Endpoint (i.e: https://um.nextgeoss.eu/oxauth/restv1/host/rsrc/resource_set)
+Resource servers (RS) can register and list their registered resources using the API Endpoint (i.e: https://triple-a.elecnor-deimos.com/oxauth/restv1/host/rsrc/resource_set)
 
-In order to interact with the UMA API, an access token must be requested to the Token Endpoint (which is the same as OpenID Connect Token Endpoint) including an additional scope: uma_protection. This special access token is named PAT (Protection API Token). If a RS wants to register a resource, first a POST request must be issued to the token endpoint:
+In order to interact with the UMA API, an access token must be requested to the Token Endpoint (which is the same as OpenID Connect Token Endpoint) including an additional scope: uma_protection. This special access token is named PAT (Protection API Token). 
+
+If a RS wants to register a resource, first a POST request must be issued to the token endpoint:
 
 .Example:
 [source,url]
@@ -322,10 +324,12 @@ The answer to this request will be a JSON with the ID of the resource under the 
 In addition, in case information about registered resources needs to be retrieved the following method is available:
 
 [source,url]
-GET /restv1/host/rsrc/resource_set/<resourceId>
+GET /oxauth/restv1/host/rsrc/resource_set/<resourceId>
 
-The parameter “resourceId” must be replaced by the ID of any registered resource. If no resource ID is passed to this Endpoint, the result will be a list of registered resources by the specific RS that performed the request. Additionally, RS owners should manually provide the policies (set of claims) which apply to the resource so they can be registered by an admin on the UMA service. This method will be replaced by a dynamic registration of necessary claims per resource.
-Resource Access Request (Client side)
+The parameter “resourceId” must be replaced by the ID of any registered resource. If no resource ID is passed to this Endpoint, the result will be a list of registered resources by the specific RS that performed the request. 
+
+Additionally, RS owners should manually provide the policies (set of claims) which apply to the resource so they can be registered by an admin on the UMA service. This method will be replaced by a dynamic registration of necessary claims per resource.
+
 
 ==== Policy Enforcement (PEP)
 
@@ -366,7 +370,9 @@ Body (Form)
     client_id=<client_id>
     grant_type=urn:ietf:params:oauth:grant-type:uma-ticket
 
-If the ticket is valid and the user claims are matched, a Resource Token a JSON response with the field “access_token” will be issued. If not, a 403 (Forbidden) response will be issued. This response can have another JSON attached explaining the error. If the error matches the “need_info” string, it is possible to extract an URL from the field “redirect_user” to gather any remaining claims.
+If the ticket is valid and the user claims are matched, a Resource Token a JSON response with the field “access_token” will be issued. If not, a 403 (Forbidden) response will be issued. 
+
+This response can have another JSON attached explaining the error. If the error matches the “need_info” string, it is possible to extract an URL from the field “redirect_user” to gather any remaining claims.
 
 [source,url]
 GET  <redirect_user_URI>?ticket=<ticket>&client_id=<client_id>&claims_redirect_uri=<redirect_uri>

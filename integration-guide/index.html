@@ -1053,10 +1053,13 @@ Parameters:</p>
 <div class="sect3">
 <h4 id="trueresource-managing"><a class="anchor" href="#trueresource-managing"></a>2.2.2. Resource Managing</h4>
 <div class="paragraph">
-<p>Resource servers (RS) can register and list their registered resources using the API Endpoint (i.e: <a href="https://um.nextgeoss.eu/oxauth/restv1/host/rsrc/resource_set" class="bare">https://um.nextgeoss.eu/oxauth/restv1/host/rsrc/resource_set</a>)</p>
+<p>Resource servers (RS) can register and list their registered resources using the API Endpoint (i.e: <a href="https://triple-a.elecnor-deimos.com/oxauth/restv1/host/rsrc/resource_set" class="bare">https://triple-a.elecnor-deimos.com/oxauth/restv1/host/rsrc/resource_set</a>)</p>
 </div>
 <div class="paragraph">
-<p>In order to interact with the UMA API, an access token must be requested to the Token Endpoint (which is the same as OpenID Connect Token Endpoint) including an additional scope: uma_protection. This special access token is named PAT (Protection API Token). If a RS wants to register a resource, first a POST request must be issued to the token endpoint:</p>
+<p>In order to interact with the UMA API, an access token must be requested to the Token Endpoint (which is the same as OpenID Connect Token Endpoint) including an additional scope: uma_protection. This special access token is named PAT (Protection API Token).</p>
+</div>
+<div class="paragraph">
+<p>If a RS wants to register a resource, first a POST request must be issued to the token endpoint:</p>
 </div>
 <div class="listingblock">
 <div class="title">Example:</div>
@@ -1087,12 +1090,14 @@ Parameters:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">GET /restv1/host/rsrc/resource_set/&lt;resourceId&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">GET /oxauth/restv1/host/rsrc/resource_set/&lt;resourceId&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The parameter “resourceId” must be replaced by the ID of any registered resource. If no resource ID is passed to this Endpoint, the result will be a list of registered resources by the specific RS that performed the request. Additionally, RS owners should manually provide the policies (set of claims) which apply to the resource so they can be registered by an admin on the UMA service. This method will be replaced by a dynamic registration of necessary claims per resource.
-Resource Access Request (Client side)</p>
+<p>The parameter “resourceId” must be replaced by the ID of any registered resource. If no resource ID is passed to this Endpoint, the result will be a list of registered resources by the specific RS that performed the request.</p>
+</div>
+<div class="paragraph">
+<p>Additionally, RS owners should manually provide the policies (set of claims) which apply to the resource so they can be registered by an admin on the UMA service. This method will be replaced by a dynamic registration of necessary claims per resource.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1156,7 +1161,10 @@ Resource Access Request (Client side)</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If the ticket is valid and the user claims are matched, a Resource Token a JSON response with the field “access_token” will be issued. If not, a 403 (Forbidden) response will be issued. This response can have another JSON attached explaining the error. If the error matches the “need_info” string, it is possible to extract an URL from the field “redirect_user” to gather any remaining claims.</p>
+<p>If the ticket is valid and the user claims are matched, a Resource Token a JSON response with the field “access_token” will be issued. If not, a 403 (Forbidden) response will be issued.</p>
+</div>
+<div class="paragraph">
+<p>This response can have another JSON attached explaining the error. If the error matches the “need_info” string, it is possible to extract an URL from the field “redirect_user” to gather any remaining claims.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1205,7 +1213,7 @@ Resource Access Grant (Server side)</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-10 16:56:42 +0200
+Last updated 2019-09-10 17:01:56 +0200
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
