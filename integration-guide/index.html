@@ -603,6 +603,9 @@ Parameters:</p>
 <p>response_type: Its value should be desired combination according to the OpenID Connect response type table.</p>
 </li>
 <li>
+<p>response_mode: use "form_post" by default</p>
+</li>
+<li>
 <p>client_id: Provided by Triple-A.</p>
 </li>
 <li>
@@ -622,7 +625,7 @@ Parameters:</p>
 <div class="listingblock">
 <div class="title">Example:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">GET oxauth/restv1/authorize?scope=openid&amp;client_id=@!5C7F.E36B.5DE3.15EE!0001!6B53.87B4!0008!A121.D32B.8BCD.4E14&amp;redirect_uri=app://test&amp;response_type=code</code></pre>
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">GET oxauth/restv1/authorize?scope=openid&amp;client_id=@!5C7F.E36B.5DE3.15EE!0001!6B53.87B4!0008!A121.D32B.8BCD.4E14&amp;redirect_uri=app://test&amp;response_type=code&amp;response_mode=form_post</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -951,6 +954,9 @@ Parameters:</p>
 <p>response_type: “code”.</p>
 </li>
 <li>
+<p>response_mode: “form_post”.</p>
+</li>
+<li>
 <p>client_id: Provided by Triple-A.</p>
 </li>
 <li>
@@ -964,7 +970,7 @@ Parameters:</p>
 <div class="listingblock">
 <div class="title">Example:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">GET /oxauth/restv1/authorize?scope=openid%20geoss_user&amp;client_id=&lt;TBD&gt;&amp;redirect_uri=&lt;TBD&gt;&amp;response_type=code</code></pre>
+<pre class="highlightjs highlight"><code data-lang="url" class="language-url hljs">GET /oxauth/restv1/authorize?scope=openid%20geoss_user&amp;client_id=&lt;TBD&gt;&amp;redirect_uri=&lt;TBD&gt;&amp;response_type=code&amp;response_type=form_post</code></pre>
 </div>
 </div>
 <div class="ulist">
