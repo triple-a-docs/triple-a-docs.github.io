@@ -60,6 +60,7 @@ All endpoints require a set of mandatory parameters in order to generate a valid
 Parameters:
 ** scope: The request should include an array of scopes, with one of them being “openid”.
 ** response_type: Its value should be desired combination according to the OpenID Connect response type table.
+** response_mode: This values should be "form_post" by default.
 ** client_id: Provided by Triple-A.
 ** redirect_uri: It should point to the client application and match the URI given on the acceptance request.
 ** state (optional): Opaque value used to maintain state between the request and the callback. Typically, Cross-Site Request Forgery (CSRF, XSRF) mitigation is done by cryptographically binding the value of this parameter with a browser cookie.
@@ -67,7 +68,7 @@ Parameters:
 
 .Example:
 [source,url]
-GET oxauth/restv1/authorize?scope=openid&client_id=@!5C7F.E36B.5DE3.15EE!0001!6B53.87B4!0008!A121.D32B.8BCD.4E14&redirect_uri=app://test&response_type=code
+GET oxauth/restv1/authorize?scope=openid&client_id=@!5C7F.E36B.5DE3.15EE!0001!6B53.87B4!0008!A121.D32B.8BCD.4E14&redirect_uri=app://test&response_type=code&response_mode=form_post
 
 If the application is trying to authenticate without user input, user credentials must be provided through the Authorization header. The code will be encoded as a parameter in the Location response header.
 
@@ -250,12 +251,13 @@ For back-end powered clients, there are several Free and Open Source solutions a
 *	*Authorization Endpoint* (GET): /oxauth/restv1/authorize
 ** scope: “openid geoss_user”.
 ** response_type: “code”.
+** response_mode: “form_post”
 ** client_id: Provided by Triple-A.
 ** redirect_uri: <TBD>
 
 .Example:
 [source,url]
-GET /oxauth/restv1/authorize?scope=openid%20geoss_user&client_id=<TBD>&redirect_uri=<TBD>&response_type=code
+GET /oxauth/restv1/authorize?scope=openid%20geoss_user&client_id=<TBD>&redirect_uri=<TBD>&response_type=code&response_mode=form_post
 
 *	*Token Endpoint* (POST): /oxauth/restv1/token
 ** scope: “openid geoss_user”.
